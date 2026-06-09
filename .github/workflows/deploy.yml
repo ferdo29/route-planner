@@ -14,14 +14,20 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Run JS actions on Node.js 24 — Node 20 is deprecated on GitHub runners.
+# Covers actions (e.g. upload-pages-artifact) whose latest release still
+# bundles the Node 20 runtime.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
       - name: Build
